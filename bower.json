@@ -19,5 +19,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "angular": "~1.0.8",
+    "coffee-script": "~1.6.3"
+  }
 }

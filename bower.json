@@ -1,0 +1,23 @@
+{
+  "name": "bc-angular-directives",
+  "version": "0.0.1",
+  "homepage": "https://github.com/buttercoin/bc-angular-directives",
+  "authors": [
+    "Matthis <matthis.perrin@gmail.com>"
+  ],
+  "description": "A collection of directives for reuse across all Buttercoin projects",
+  "main": "main.js",
+  "keywords": [
+    "buttercoin",
+    "angular",
+    "directives"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

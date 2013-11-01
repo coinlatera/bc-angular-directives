@@ -6,7 +6,7 @@
     "Matthis <matthis.perrin@gmail.com>"
   ],
   "description": "A collection of directives for reuse across all Buttercoin projects",
-  "main": "main.js",
+  "main": "dist/bc-angular-directives.js",
   "keywords": [
     "buttercoin",
     "angular",

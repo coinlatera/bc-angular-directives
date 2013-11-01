@@ -1,4 +1,4 @@
-angular.module('bc.table').directive 'bcTable', () ->
+angular.module('bc.table', []).directive 'bcTable', () ->
   restrict: 'E'
 
   replace: true

@@ -1,5 +1,5 @@
 define ['app', ], (app) ->
-  app.directive 'bcTable', () ->
+  app.module('bc-angular-directives').directive 'bcTable', () ->
     restrict: 'E'
 
     replace: true

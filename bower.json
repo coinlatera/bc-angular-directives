@@ -24,6 +24,7 @@
     "angular": "~1.0.8"
   },
   "devDependencies": {
-    "coffee-script": "~1.6.3"
+    "coffee-script": "~1.6.3",
+    "bc-utilities": "*"
   }
 }

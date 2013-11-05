@@ -1,8 +1,12 @@
-<html>
+<html ng-app="test-app">
   <head>
-    <!--<script src="../dist/***.js"></script>-->
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/bc-utilities/dist/bc-utilities-min.js"></script>
+    <script src="../dist/bc-angular-directives.js"></script>
+    <script src="app.js"></script>
   </head>
-  <body>
+  <body ng-controller="MainCtrl">
     <h1>Hello World</h1>
+    <bc-table table-config="tableConfig" header-model="tableHeaderModel" table-model="tableModel"></bc-table>
   </body>
 </html>

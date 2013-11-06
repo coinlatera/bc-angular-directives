@@ -11,26 +11,30 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', () 
   template:
     '<div>' +
       '<table ng-class="config.tableClass">' +
-        '<tr>' +
-          '<th ng-repeat="header in headers" ng-style="{width: header.width}" ng-class="header.classNames" ng-click="headerClick(header, $index)">' +
-            '{{header.label}}' +
-            '<span ng-show="header.sortable">' +
-              '<span ng-switch on="currentSort.headerIndex - $index">' +
-                '<span ng-switch-when="0">' +
-                  '<i ng-show="currentSort.reverse" class="icon icon-caret-up"></i>' +
-                  '<i ng-hide="currentSort.reverse" class="icon icon-caret-down"></i>' +
+        '<thead>' +
+          '<tr>' +
+            '<th ng-repeat="header in headers" ng-style="{width: header.width}" ng-class="header.classNames" ng-click="headerClick(header, $index)">' +
+              '{{header.label}}' +
+              '<span ng-show="header.sortable">' +
+                '<span ng-switch on="currentSort.headerIndex - $index">' +
+                  '<span ng-switch-when="0">' +
+                    '<i ng-show="currentSort.reverse" class="icon icon-caret-up"></i>' +
+                    '<i ng-hide="currentSort.reverse" class="icon icon-caret-down"></i>' +
+                  '</span>' +
+                  '<span ng-switch-default><i class="icon icon-sort"></i></span>' +
                 '</span>' +
-                '<span ng-switch-default><i class="icon icon-sort"></i></span>' +
               '</span>' +
-            '</span>' +
-          '</th>' +
-        '</tr>' +
-        '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' +
-          '<td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle">' +
-            '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></span></div>' +
-            '<div ng-switch-default ng-bind-html-unsafe="header.format(line[header.key])"></div>' +
-          '</td>' +
-        '</tr>' +
+            '</th>' +
+          '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+          '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' +
+            '<td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle">' +
+              '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></span></div>' +
+              '<div ng-switch-default ng-bind-html-unsafe="header.format(line[header.key])"></div>' +
+            '</td>' +
+          '</tr>' +
+        '</tbody>' +
       '</table>' +
       '<div class="right" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div>' +
     '</div>'

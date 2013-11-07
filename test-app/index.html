@@ -1,5 +1,8 @@
 <html ng-app="test-app">
   <head>
+    <link rel="stylesheet" href="../bower_components/chosen/chosen.css">
+    <script src="../bower_components/jquery/jquery.js"></script>
+    <script src="../bower_components/chosen/chosen.jquery.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/bc-utilities/dist/bc-utilities-min.js"></script>
     <script src="../dist/bc-angular-directives.js"></script>
@@ -8,5 +11,6 @@
   <body ng-controller="MainCtrl">
     <h1>Hello World</h1>
     <bc-table table-config="tableConfig" header-model="tableHeaderModel" table-model="tableModel"></bc-table>
+    <select chosen data-placeholder="Select Something..." disable-search="true" ng-model="selected" width="200" ng-options="item for item in items"><option value=""></option></select>
   </body>
 </html>

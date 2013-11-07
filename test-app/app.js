@@ -1,7 +1,8 @@
 var app = angular.module('test-app', ['bc.angular-directives']);
 
 app.controller('MainCtrl', function MainCtrl ($scope, $filter) {
-
+  ///////////////
+  // BC-TABLE
   $scope.tableConfig = {
     tableClass: 'table-class',
     lineClick: function (line) {
@@ -24,5 +25,11 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter) {
       money: '5000'
     }
   ];
+
+  ///////////////
+  // BC-CHOSEN
+  $scope.selected = '';
+
+  $scope.items = ['Banana', 'Apple', 'Orange'];
 
 });

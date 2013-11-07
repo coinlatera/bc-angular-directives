@@ -1,1 +1,1 @@
-angular.module('bc.angular-directives', ['bc.table'])
+angular.module('bc.angular-directives', ['bc.table', 'bc.chosen'])

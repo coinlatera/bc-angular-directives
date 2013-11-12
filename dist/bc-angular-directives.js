@@ -1,1 +1,204 @@
-(function(){angular.module("bc.angular-directives",["bc.table","bc.chosen"])}).call(this),function(){var a=[].indexOf||function(a){for(var b=0,c=this.length;c>b;b++)if(b in this&&this[b]===a)return b;return-1};angular.module("bc.chosen",[]).directive("chosen",["$timeout",function(b){var c,d,e,f,g;return d=/^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/,c=["noResultsText","allowSingleDeselect","disableSearchThreshold","disableSearch","enableSplitWordSearch","inheritSelectClasses","maxSelectedOptions","placeholderTextMultiple","placeholderTextSingle","searchContains","singleBackstrokeDelete","displayDisabledOptions","displaySelectedOptions","width"],g=function(a){return a.replace(/[A-Z]/g,function(a){return"_"+a.toLowerCase()})},f=function(a){var b,c,d;if(angular.isArray(a))return 0===a.length;if(angular.isObject(a))for(c=0,d=a.length;d>c;c++)if(b=a[c],a.hasOwnProperty(b))return!1;return!0},e={restrict:"A",require:"?ngModel",terminal:!0,link:function(e,h,i,j){var k,l,m,n,o,p,q,r;return m=e.$eval(i.chosen)||{},angular.forEach(i,function(b,d){return a.call(c,d)>=0?m[g(d)]=e.$eval(b):void 0}),o=function(){return h.addClass("loading").attr("disabled",!0).trigger("chosen:updated")},p=function(){return h.removeClass("loading").attr("disabled",!1).trigger("chosen:updated")},k=function(a){return h.empty().append("<option selected>"+a+"</option>").attr("disabled",!0).trigger("chosen:updated")},b(function(){return h.chosen(m)}),j&&(n=j.$render,j.$render=function(){return n(),h.trigger("chosen:updated")},i.multiple&&(r=function(){return j.$viewValue},e.$watch(r,j.$render,!0))),i.ngOptions?(l=i.ngOptions.match(d),q=l[7],angular.isUndefined(e.$eval(q))&&o(),e.$watch(q,function(a,b){return a!==b&&(p(),f(a))?k(m.no_results_text||"No values available"):void 0})):void 0}}}])}.call(this),function(){angular.module("bc.table",["start-at","filtered-by"]).directive("bcTable",function(){return{restrict:"E",replace:!0,scope:{tableConfig:"=",headerModel:"=",tableModel:"="},template:'<div><table ng-class="config.tableClass"><thead><tr><th ng-repeat="header in headers" ng-style="{width: header.width}" ng-class="header.classNames" ng-click="headerClick(header, $index)">{{header.label}}<span ng-show="header.sortable"><span ng-switch on="currentSort.headerIndex - $index"><span ng-switch-when="0"><i ng-show="currentSort.reverse" class="icon icon-caret-up"></i><i ng-hide="currentSort.reverse" class="icon icon-caret-down"></i></span><span ng-switch-default><i class="icon icon-sort"></i></span></span></span></th></tr></thead><tbody><tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}"><td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle"><div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></span></div><div ng-switch-default ng-bind-html-unsafe="header.format(line[header.key])"></div></td></tr></tbody></table><div class="right" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div></div>',link:function(a){var b;return a.currentSort={headerIndex:-1,sortingKey:"",reverse:!1},a.$watch("tableConfig",function(){return b()},!0),a.$watch("headerModel",function(){return b()},!0),a.$watch("tableModel",function(){return b()},!0),b=function(){var b,c,d,e;for(a.headers=a.headerModel,a.data=a.tableModel,a.config=a.tableConfig,a.filter=exist(a.config.filter)?a.config.filter:{},exist(a.config.pagination)?(a.showPagination=!0,a.pageSize=a.config.pagination.pageSize,a.currentPage=a.config.pagination.currentPage):(a.showPagination=!1,a.pageSize=a.data.length,a.currentPage=1),e=a.headers,c=0,d=e.length;d>c;c++)b=e[c],exist(b.format)&&"function"===type(b.format)?(b.classNames="left",exist(b.sortable)&&(b.classNames+=" sortable-header"),exist(b.customClass)&&(b.classNames+=" "+b.customClass)):b.format=function(a){return a}},a.headerClick=function(b,c){return b.sortable?(a.currentSort.reverse=a.currentSort.headerIndex===c&&!a.currentSort.reverse,a.currentSort.headerIndex=c,a.currentSort.sortingKey=b.key):void 0},a.lineClick=function(b){return exist(a.config.lineClick)?a.config.lineClick(b):void 0}}}})}.call(this),function(){angular.module("filtered-by",[]).filter("filteredBy",function(){return function(a,b,c){var d,e,f,g,h,i,j;if(!exist(b)||0===b.length||!exist(c)||!type("string"===c)||""===c)return a;for(d=[],g=0,i=a.length;i>g;g++)for(f=a[g],h=0,j=b.length;j>h;h++)if(e=b[h],exist(f[e].indexOf)&&exist(f[e].toLowerCase())&&-1!==f[e].toLowerCase().indexOf(c.toLowerCase())){d.push(f);break}return d}})}.call(this),function(){angular.module("start-at",[]).filter("startAt",function(){return function(a,b){return exist(a)?a.slice(b,a.length):a}})}.call(this);
+(function() {
+  angular.module('bc.angular-directives', ['bc.table', 'bc.chosen']);
+
+}).call(this);
+
+(function() {
+  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  angular.module('bc.chosen', []).directive('chosen', [
+    '$timeout', function($timeout) {
+      var CHOSEN_OPTION_WHITELIST, NG_OPTIONS_REGEXP, chosen, isEmpty, snakeCase;
+      NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/;
+      CHOSEN_OPTION_WHITELIST = ['noResultsText', 'allowSingleDeselect', 'disableSearchThreshold', 'disableSearch', 'enableSplitWordSearch', 'inheritSelectClasses', 'maxSelectedOptions', 'placeholderTextMultiple', 'placeholderTextSingle', 'searchContains', 'singleBackstrokeDelete', 'displayDisabledOptions', 'displaySelectedOptions', 'width'];
+      snakeCase = function(input) {
+        return input.replace(/[A-Z]/g, function($1) {
+          return "_" + ($1.toLowerCase());
+        });
+      };
+      isEmpty = function(value) {
+        var key, _i, _len;
+        if (angular.isArray(value)) {
+          return value.length === 0;
+        } else if (angular.isObject(value)) {
+          for (_i = 0, _len = value.length; _i < _len; _i++) {
+            key = value[_i];
+            if (value.hasOwnProperty(key)) {
+              return false;
+            }
+          }
+        }
+        return true;
+      };
+      return chosen = {
+        restrict: 'A',
+        require: '?ngModel',
+        terminal: true,
+        link: function(scope, element, attr, ctrl) {
+          var disableWithMessage, match, options, origRender, startLoading, stopLoading, valuesExpr, viewWatch;
+          options = scope.$eval(attr.chosen) || {};
+          angular.forEach(attr, function(value, key) {
+            if (__indexOf.call(CHOSEN_OPTION_WHITELIST, key) >= 0) {
+              return options[snakeCase(key)] = scope.$eval(value);
+            }
+          });
+          startLoading = function() {
+            return element.addClass('loading').attr('disabled', true).trigger('chosen:updated');
+          };
+          stopLoading = function() {
+            return element.removeClass('loading').attr('disabled', false).trigger('chosen:updated');
+          };
+          disableWithMessage = function(message) {
+            return element.empty().append("<option selected>" + message + "</option>").attr('disabled', true).trigger('chosen:updated');
+          };
+          $timeout(function() {
+            return element.chosen(options);
+          });
+          if (ctrl) {
+            origRender = ctrl.$render;
+            ctrl.$render = function() {
+              origRender();
+              return element.trigger('chosen:updated');
+            };
+            if (attr.multiple) {
+              viewWatch = function() {
+                return ctrl.$viewValue;
+              };
+              scope.$watch(viewWatch, ctrl.$render, true);
+            }
+          }
+          if (attr.ngOptions) {
+            match = attr.ngOptions.match(NG_OPTIONS_REGEXP);
+            valuesExpr = match[7];
+            if (angular.isUndefined(scope.$eval(valuesExpr))) {
+              startLoading();
+            }
+            return scope.$watch(valuesExpr, function(newVal, oldVal) {
+              if (newVal !== oldVal) {
+                stopLoading();
+                if (isEmpty(newVal)) {
+                  return disableWithMessage(options.no_results_text || 'No values available');
+                }
+              }
+            });
+          }
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.table', ['start-at', 'filtered-by']).directive('bcTable', function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        tableConfig: '=',
+        headerModel: '=',
+        tableModel: '='
+      },
+      template: '<div>' + '<table ng-class="config.tableClass">' + '<thead>' + '<tr>' + '<th ng-repeat="header in headers" ng-style="{width: header.width}" ng-class="header.classNames" ng-click="headerClick(header, $index)">' + '{{header.label}}' + '<span ng-show="header.sortable">' + '<span ng-switch on="currentSort.headerIndex - $index">' + '<span ng-switch-when="0">' + '<i ng-show="currentSort.reverse" class="icon icon-caret-up"></i>' + '<i ng-hide="currentSort.reverse" class="icon icon-caret-down"></i>' + '</span>' + '<span ng-switch-default><i class="icon icon-sort"></i></span>' + '</span>' + '</span>' + '</th>' + '</tr>' + '</thead>' + '<tbody>' + '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' + '<td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle">' + '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></span></div>' + '<div ng-switch-default ng-bind-html-unsafe="header.format(line[header.key])"></div>' + '</td>' + '</tr>' + '</tbody>' + '</table>' + '<div class="right" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div>' + '</div>',
+      link: function(scope, element, attrs) {
+        var modelChanged;
+        scope.currentSort = {
+          headerIndex: -1,
+          sortingKey: '',
+          reverse: false
+        };
+        scope.$watch('tableConfig', function() {
+          return modelChanged();
+        }, true);
+        scope.$watch('headerModel', function() {
+          return modelChanged();
+        }, true);
+        scope.$watch('tableModel', function() {
+          return modelChanged();
+        }, true);
+        modelChanged = function() {
+          var header, _i, _len, _ref;
+          scope.headers = scope.headerModel;
+          scope.data = scope.tableModel;
+          scope.config = scope.tableConfig;
+          scope.filter = exist(scope.config.filter) ? scope.config.filter : {};
+          if (exist(scope.config.pagination)) {
+            scope.showPagination = true;
+            scope.pageSize = scope.config.pagination.pageSize;
+            scope.currentPage = scope.config.pagination.currentPage;
+          } else {
+            scope.showPagination = false;
+            scope.pageSize = scope.data.length;
+            scope.currentPage = 1;
+          }
+          _ref = scope.headers;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            header = _ref[_i];
+            if (!(exist(header.format) && (type(header.format)) === 'function')) {
+              header.format = function(value) {
+                return value;
+              };
+              continue;
+            }
+            header.classNames = 'left';
+            if (exist(header.sortable)) {
+              header.classNames += ' sortable-header';
+            }
+            if (exist(header.customClass)) {
+              header.classNames += ' ' + header.customClass;
+            }
+          }
+        };
+        scope.headerClick = function(header, index) {
+          if (header.sortable) {
+            scope.currentSort.reverse = scope.currentSort.headerIndex === index && !scope.currentSort.reverse;
+            scope.currentSort.headerIndex = index;
+            return scope.currentSort.sortingKey = header.key;
+          }
+        };
+        return scope.lineClick = function(line) {
+          if (exist(scope.config.lineClick)) {
+            return scope.config.lineClick(line);
+          }
+        };
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('filtered-by', []).filter('filteredBy', function() {
+    return function(data, keys, value) {
+      var filtered, key, obj, _i, _j, _len, _len1;
+      if (!exist(keys) || keys.length === 0 || !exist(value) || !(type(value === 'string')) || value === '') {
+        return data;
+      }
+      filtered = [];
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        obj = data[_i];
+        for (_j = 0, _len1 = keys.length; _j < _len1; _j++) {
+          key = keys[_j];
+          if (!(!exist(obj[key].indexOf) || !exist(obj[key].toLowerCase()) || obj[key].toLowerCase().indexOf(value.toLowerCase()) === -1)) {
+            filtered.push(obj);
+            break;
+          }
+        }
+      }
+      return filtered;
+    };
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('start-at', []).filter('startAt', function() {
+    return function(data, index) {
+      if (!exist(data)) {
+        return data;
+      }
+      return data.slice(index, data.length);
+    };
+  });
+
+}).call(this);

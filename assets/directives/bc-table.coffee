@@ -31,7 +31,7 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', () 
           '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' +
             '<td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle">' +
               '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></span></div>' +
-              '<div ng-switch-when="link"><a href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></a></div>' +
+              '<div ng-switch-when="link"><a href="#" onclick="return false;" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></a></div>' +
               '<div ng-switch-default ng-bind-html-unsafe="header.format(line[header.key])"></div>' +
             '</td>' +
           '</tr>' +

@@ -6,23 +6,53 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter) {
   $scope.tableConfig = {
     tableClass: 'table-class',
     lineClick: function (line) {
-      alert(line.money);
+      // alert(line.money);
     }
   }
 
   $scope.tableHeaderModel = [
     { label: 'Name', key: 'name', sortable: true },
-    { label: 'Money', key: 'money', sortable: true, format: function (value) { return $filter('currency')(value); } }
+    { label: 'Money', key: 'money', sortable: true, format: function (value) { return $filter('currency')(value); } },
+    { label: 'Button', key: 'button' },
+    { label: 'Link', key: 'link' }
   ];
 
   $scope.tableModel = [
     {
       name: 'Homer',
-      money: '1000'
+      money: '1000',
+      button: {
+        type: 'button',
+        title: 'Button',
+        callback: function (line) {
+          alert(line.money);
+        }
+      },
+      link: {
+        type: 'link',
+        title: 'Link',
+        callback: function (line) {
+          alert(line.money);
+        }
+      }
     },
     {
       name: 'Luke',
-      money: '5000'
+      money: '5000',
+      button: {
+        type: 'button',
+        title: 'Button',
+        callback: function (line) {
+          alert(line.money);
+        }
+      },
+      link: {
+        type: 'link',
+        title: 'Link',
+        callback: function (line) {
+          alert(line.money);
+        }
+      }
     }
   ];
 

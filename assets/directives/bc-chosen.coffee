@@ -74,5 +74,5 @@ angular.module('bc.chosen', []).directive 'chosen', ['$timeout', ($timeout) ->
         scope.$watch valuesExpr, (newVal, oldVal) ->
           unless newVal is oldVal
             stopLoading()
-            disableWithMessage(options.no_results_text || 'No values available') if isEmpty(newVal)
+          disableWithMessage(options.no_results_text || 'No values available') if !newVal or isEmpty(newVal)
 ]

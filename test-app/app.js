@@ -59,7 +59,9 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter) {
   ///////////////
   // BC-CHOSEN
   $scope.selected = '';
-
   $scope.items = ['Banana', 'Apple', 'Orange'];
+
+  $scope.emptySelected = '';
+  $scope.emptyItems = [];
 
 });

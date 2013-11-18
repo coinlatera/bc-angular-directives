@@ -76,9 +76,9 @@
             return scope.$watch(valuesExpr, function(newVal, oldVal) {
               if (newVal !== oldVal) {
                 stopLoading();
-                if (isEmpty(newVal)) {
-                  return disableWithMessage(options.no_results_text || 'No values available');
-                }
+              }
+              if (!newVal || isEmpty(newVal)) {
+                return disableWithMessage(options.no_results_text || 'No values available');
               }
             });
           }

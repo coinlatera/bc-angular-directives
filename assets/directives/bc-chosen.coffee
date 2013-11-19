@@ -1,4 +1,4 @@
-angular.module('bc.chosen', []).directive 'chosen', ['$timeout', ($timeout) ->
+angular.module('bc.chosen', []).directive 'chosen', ['$timeout', '$compile', ($timeout, $compile) ->
   # This is stolen from Angular...
   NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/
 
@@ -42,7 +42,9 @@ angular.module('bc.chosen', []).directive 'chosen', ['$timeout', ($timeout) ->
         options[snakeCase(key)] = scope.$eval(value) if key in CHOSEN_OPTION_WHITELIST
 
       startLoading = -> element.addClass('loading').attr('disabled', true).trigger('chosen:updated')
-      stopLoading = -> element.removeClass('loading').attr('disabled', false).trigger('chosen:updated')
+      stopLoading = ->
+        $compile(element)(scope)
+        element.removeClass('loading').attr('disabled', false).trigger('chosen:updated')
 
       disableWithMessage = (message) ->
         element.empty().append("<option selected>#{message}</option>").attr('disabled', true).trigger('chosen:updated')

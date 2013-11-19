@@ -1,6 +1,6 @@
 var app = angular.module('test-app', ['bc.angular-directives']);
 
-app.controller('MainCtrl', function MainCtrl ($scope, $filter) {
+app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout) {
   ///////////////
   // BC-TABLE
   $scope.tableConfig = {
@@ -59,7 +59,10 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter) {
   ///////////////
   // BC-CHOSEN
   $scope.selected = '';
-  $scope.items = ['Banana', 'Apple', 'Orange'];
+  $scope.items = [];
+  $timeout(function () {
+    $scope.items = ['Banana', 'Apple', 'Orange'];
+  });
 
   $scope.emptySelected = '';
   $scope.emptyItems = [];

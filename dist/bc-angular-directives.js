@@ -7,7 +7,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('bc.chosen', []).directive('chosen', [
-    '$timeout', function($timeout) {
+    '$timeout', '$compile', function($timeout, $compile) {
       var CHOSEN_OPTION_WHITELIST, NG_OPTIONS_REGEXP, chosen, isEmpty, snakeCase;
       NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/;
       CHOSEN_OPTION_WHITELIST = ['noResultsText', 'allowSingleDeselect', 'disableSearchThreshold', 'disableSearch', 'enableSplitWordSearch', 'inheritSelectClasses', 'maxSelectedOptions', 'placeholderTextMultiple', 'placeholderTextSingle', 'searchContains', 'singleBackstrokeDelete', 'displayDisabledOptions', 'displaySelectedOptions', 'width'];
@@ -46,6 +46,7 @@
             return element.addClass('loading').attr('disabled', true).trigger('chosen:updated');
           };
           stopLoading = function() {
+            $compile(element)(scope);
             return element.removeClass('loading').attr('disabled', false).trigger('chosen:updated');
           };
           disableWithMessage = function(message) {

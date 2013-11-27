@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-directives', ['bc.table', 'bc.chosen']);
+  angular.module('bc.angular-directives', ['bc.table', 'bc.chosen', 'bc.switch']);
 
 }).call(this);
 
@@ -83,6 +83,38 @@
               }
             });
           }
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.switch', []).directive('bcSwitch', [
+    '$timeout', function($timeout) {
+      return {
+        restrict: 'A',
+        scope: {
+          ngModel: '='
+        },
+        link: function(scope, element, attrs) {
+          var activeClass;
+          activeClass = scope.ngModel ? 'active' : '';
+          $(element).wrap('<div class="switch ' + activeClass + '" data-animated="false" />').parent().bootstrapSwitch();
+          $(element).parents('.switch').bootstrapSwitch('setState', scope.ngModel);
+          $(element).parents('.switch').on('switch-change', function(e, data) {
+            $(element).parents('.has-switch').toggleClass('active', data.value);
+            scope.ngModel = data.value;
+            return scope.$apply();
+          });
+          return scope.$watch('ngModel', function(newValue) {
+            if (exist(newValue)) {
+              return $timeout(function() {
+                return $(element).parents('.switch').bootstrapSwitch('setState', newValue);
+              });
+            }
+          });
         }
       };
     }

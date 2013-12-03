@@ -58,10 +58,13 @@
           if (ctrl) {
             origRender = ctrl.$render;
             ctrl.$render = function() {
+              if (attr.required && typeof scope.$eval(attr.ngModel) === 'object') {
+                ctrl.$setValidity('emptySelect', !!Object.keys(scope.$eval(attr.ngModel)).length);
+              }
               origRender();
               return element.trigger('chosen:updated');
             };
-            if (attr.multiple) {
+            if (attr.multiple || typeof scope.$eval(attr.ngModel) === 'object') {
               viewWatch = function() {
                 return ctrl.$viewValue;
               };

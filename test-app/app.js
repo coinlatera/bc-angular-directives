@@ -67,4 +67,17 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout) {
   $scope.emptySelected = '';
   $scope.emptyItems = [];
 
+  $scope.formSelected = {};
+  $scope.formItems = [
+    {
+      name: 'Item 1'
+    },
+    {
+      name: 'Item 2'
+    },
+    {
+      name: 'Item 3'
+    }
+  ];
+  
 });

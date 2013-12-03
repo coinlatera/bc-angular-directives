@@ -52,16 +52,18 @@ angular.module('bc.chosen', []).directive 'chosen', ['$timeout', '$compile', ($t
       # Init chosen on the next loop so ng-options can populate the select
       $timeout -> element.chosen options
 
-      #Watch the underlying ng-model for updates and trigger an update when they occur.
+      # Watch the underlying ng-model for updates and trigger an update when they occur.
       if ctrl
         origRender = ctrl.$render
         ctrl.$render = ->
+          # Fixes bug when select is required and ngModel is an object
+          ctrl.$setValidity('emptySelect', !!Object.keys(scope.$eval(attr.ngModel)).length) if attr.required and typeof scope.$eval(attr.ngModel) is 'object'
           origRender()
           element.trigger('chosen:updated')
 
         # This is basically taken from angular ngOptions source.  ngModel watches reference, not value,
         # so when values are added or removed from array ngModels, $render won't be fired.
-        if attr.multiple
+        if attr.multiple or typeof scope.$eval(attr.ngModel) is 'object' # Fixes bug when ngModel is an object
           viewWatch = -> ctrl.$viewValue
           scope.$watch viewWatch, ctrl.$render, true
 
@@ -77,4 +79,11 @@ angular.module('bc.chosen', []).directive 'chosen', ['$timeout', '$compile', ($t
           unless newVal is oldVal
             stopLoading()
           disableWithMessage(options.no_results_text || 'No values available') if !newVal or isEmpty(newVal)
+
+      # Watch ngModel  if required is specified
+      # if attr.required
+      #   scope.$watch ->
+      #     scope.$eval attr.ngModel
+      #   , (value) ->
+      #     console.log value
 ]

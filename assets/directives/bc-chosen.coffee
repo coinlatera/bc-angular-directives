@@ -57,7 +57,7 @@ angular.module('bc.chosen', []).directive 'chosen', ['$timeout', '$compile', ($t
         origRender = ctrl.$render
         ctrl.$render = ->
           # Fixes bug when select is required and ngModel is an object
-          ctrl.$setValidity('emptySelect', !!Object.keys(scope.$eval(attr.ngModel)).length) if attr.required and typeof scope.$eval(attr.ngModel) is 'object'
+          ctrl.$setValidity('required', !!Object.keys(scope.$eval(attr.ngModel)).length) if attr.required and typeof scope.$eval(attr.ngModel) is 'object'
           origRender()
           element.trigger('chosen:updated')
 
@@ -79,11 +79,4 @@ angular.module('bc.chosen', []).directive 'chosen', ['$timeout', '$compile', ($t
           unless newVal is oldVal
             stopLoading()
           disableWithMessage(options.no_results_text || 'No values available') if !newVal or isEmpty(newVal)
-
-      # Watch ngModel  if required is specified
-      # if attr.required
-      #   scope.$watch ->
-      #     scope.$eval attr.ngModel
-      #   , (value) ->
-      #     console.log value
 ]

@@ -59,7 +59,7 @@
             origRender = ctrl.$render;
             ctrl.$render = function() {
               if (attr.required && typeof scope.$eval(attr.ngModel) === 'object') {
-                ctrl.$setValidity('emptySelect', !!Object.keys(scope.$eval(attr.ngModel)).length);
+                ctrl.$setValidity('required', !!Object.keys(scope.$eval(attr.ngModel)).length);
               }
               origRender();
               return element.trigger('chosen:updated');

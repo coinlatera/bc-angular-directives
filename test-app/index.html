@@ -11,7 +11,7 @@
   <body ng-controller="MainCtrl">
     <h1>Hello World</h1>
     <bc-table table-config="tableConfig" header-model="tableHeaderModel" table-model="tableModel"></bc-table>
-    <select chosen data-placeholder="Select Something..." disable-search="true" ng-model="selected" width="200" ng-options="item for item in items"><option value=""></option></select>
+    <select chosen data-placeholder="Select Something..." search-contains="true" ng-model="selected" width="200" ng-options="item for item in items"><option value=""></option></select>
     <select chosen data-placeholder="Select Something..." no-results-text="'Empty Select'" disable-search="true" ng-model="emptySelected" width="200" ng-options="item for item in emptyItems"><option value=""></option></select>
     <form name="testForm">
       <select chosen data-placeholder="Select Something..." no-results-text="'No Bank Account'" disable-search="true" ng-model="formSelected" width="200" ng-options="item.name for item in formItems" required><option value=""></option></select>

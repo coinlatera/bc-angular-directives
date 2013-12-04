@@ -61,7 +61,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout) {
   $scope.selected = '';
   $scope.items = [];
   $timeout(function () {
-    $scope.items = ['Banana', 'Apple', 'Orange'];
+    $scope.items = ['01 - Banana', '02 - Apple', '03 - Orange'];
   });
 
   $scope.emptySelected = '';

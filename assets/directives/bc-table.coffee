@@ -105,7 +105,7 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', () 
       if header.sortable
         scope.currentSort.reverse = scope.currentSort.headerIndex is index and not scope.currentSort.reverse
         scope.currentSort.headerIndex = index
-        scope.currentSort.sortingKey = header.key
+        scope.currentSort.sortingKey = if exist(header.sortingKey) then header.sortingKey else header.key
 
 
     # Handle a click on a line

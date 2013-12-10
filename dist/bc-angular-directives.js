@@ -189,7 +189,7 @@
           if (header.sortable) {
             scope.currentSort.reverse = scope.currentSort.headerIndex === index && !scope.currentSort.reverse;
             scope.currentSort.headerIndex = index;
-            return scope.currentSort.sortingKey = header.key;
+            return scope.currentSort.sortingKey = exist(header.sortingKey) ? header.sortingKey : header.key;
           }
         };
         return scope.lineClick = function(line) {

@@ -37,7 +37,7 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', () 
           '</tr>' +
         '</tbody>' +
       '</table>' +
-      '<div class="right" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div>' +
+      '<div class="right pagination" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div>' +
     '</div>'
 
   link: (scope, element, attrs) ->

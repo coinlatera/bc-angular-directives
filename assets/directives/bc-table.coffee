@@ -14,7 +14,7 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', () 
         '<thead>' +
           '<tr>' +
             '<th ng-repeat="header in headers" ng-style="{width: header.width}" ng-class="header.classNames" ng-click="headerClick(header, $index)">' +
-              '{{header.label}}' +
+              '{{header.processedLabel}}' +
               '<span ng-show="header.sortable">' +
                 '<span ng-switch on="currentSort.headerIndex - $index">' +
                   '<span ng-switch-when="0">' +
@@ -89,6 +89,16 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', () 
         unless exist(header.format) and (type header.format) is 'function'
           header.format = (value) -> value
           continue
+
+        # Process the header label
+        if not exist header.label 
+          header.processedLabel = ''
+        else if (type header.label) is 'string'
+          header.processedLabel = header.label
+        else if (type header.label) is 'function'
+          header.processedLabel = header.label()
+        else
+          header.processedLabel = ''
 
         # Define the header classes
         header.classNames = 'left'

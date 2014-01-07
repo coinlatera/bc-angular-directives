@@ -12,7 +12,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout) {
 
   $scope.tableHeaderModel = [
     { label: 'Name', key: 'name', sortable: true },
-    { label: 'Money', key: 'money', sortable: true, format: function (value) { return $filter('currency')(value); } },
+    { label: function () { return 'Money'; }, key: 'money', sortable: true, format: function (value) { return $filter('currency')(value); } },
     { label: 'Button', key: 'button' },
     { label: 'Link', key: 'link' }
   ];

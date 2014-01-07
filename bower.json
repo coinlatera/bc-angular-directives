@@ -21,14 +21,16 @@
     "tests"
   ],
   "dependencies": {
+    "jquery": "2.0.3",
+    "bc-utilities": "*",
     "angular": "~1.0.8",
+    "bootstrap": "2.3.2",
     "bc-angular-models": "master",
-    "bc-angular-notification": "master"
+    "bc-angular-notification": "master",
+    "angular-safeapply": "https://github.com/buttercoin/angular-safeapply.git#1.0.5",
+    "chosen": "https://github.com/harvesthq/chosen/releases/download/1.0.0/chosen_v1.0.0.zip"
   },
   "devDependencies": {
-    "coffee-script": "~1.6.3",
-    "bc-utilities": "*",
-    "jquery": "2.0.3",
-    "chosen": "https://github.com/harvesthq/chosen/releases/download/1.0.0/chosen_v1.0.0.zip"
+    "coffee-script": "~1.6.3"
   }
 }

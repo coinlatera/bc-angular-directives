@@ -4,6 +4,8 @@
     <script src="../bower_components/jquery/jquery.js"></script>
     <script src="../bower_components/chosen/chosen.jquery.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-safeapply/safe-apply.js"></script>
+    <script src="../bower_components/bootstrap/js/bootstrap-tooltip.js"></script>
     <script src="../bower_components/bc-utilities/dist/bc-utilities-min.js"></script>
     <script src="../bower_components/bc-angular-i18n/dist/bc-angular-i18n.js"></script>
     <script src="../bower_components/bc-angular-models/dist/bc-angular-models.js"></script>
@@ -18,8 +20,22 @@
     <select chosen data-placeholder="Select Something..." search-contains="true" ng-model="selected" width="200" ng-options="item for item in items"></select>
     <select chosen data-placeholder="Select Something..." no-results-text="'Empty Select'" disable-search="true" ng-model="emptySelected" width="200" ng-options="item for item in emptyItems"></select>
     <hr />
-    <form bc-form name="testForm" bc-form-on-submit="onFormSubmit()">
-      <select chosen data-placeholder="Select Something..." no-results-text="'No Bank Account'" disable-search="true" ng-model="formSelected" width="200" ng-options="item.name for item in formItems" required></select>
+    <form bc-form name="testForm" bc-form-on-submit="onFormSubmit()" bc-form-reset="true" bc-form-on-success="onFormSuccess()" novalidate>
+      <div class="password-group clearfix">
+        <h3>Test Form</h3>
+        <div bc-form-text-field-error bc-form-field-id="textField">
+          <label for="textField">Text Field</label>
+          <div class="controls">
+            <input id="textField" name="textField" type="text" ng-model="form.text" required>
+          </div>
+        </div>
+	<div bc-form-chosen-field-error bc-form-field-id="selectField">
+          <label for="selectField">Select Field</label>
+          <div class="controls">
+            <select chosen id="selectField" name="selectField" data-placeholder="Select Something..." no-results-text="'No Bank Account'" disable-search="true" ng-model="form.select" width="200" ng-options="item.name for item in formItems" required></select>
+          </div>
+        </div>
+      </div>
       <input type="submit">
     </form>
   </body>

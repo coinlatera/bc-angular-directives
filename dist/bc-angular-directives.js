@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-directives', ['bc.form', 'bc.table', 'bc.chosen', 'bc.switch']);
+  angular.module('bc.angular-directives', ['bc.form', 'bc.base-form-field-error', 'bc.form-text-field-error', 'bc.form-chosen-field-error', 'bc.form-date-of-birth-field-error', 'bc.form-hidden-field-error', 'bc.table', 'bc.chosen', 'bc.switch']);
 
 }).call(this);
 
@@ -86,6 +86,218 @@
               }
             });
           }
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.form-chosen-field-error', ['bc.base-form-field-error']).directive('bcFormChosenFieldError', [
+    '$timeout', 'baseBcFormFieldError', function($timeout, baseBcFormFieldError) {
+      return {
+        restrict: "A",
+        require: "^form",
+        scope: true,
+        link: function(scope, element, attrs, formCtrl) {
+          scope.getInputElement = function() {
+            return element.find('#' + attrs.bcFormFieldId);
+          };
+          scope.getTooltipTarget = function() {
+            return element.find('#' + attrs.bcFormFieldId + '_chosen');
+          };
+          scope.setFieldFocusHandler = function() {
+            return $timeout(function() {
+              return element.find('#' + attrs.bcFormFieldId).chosen().on('chosen:showing_dropdown', function() {
+                return scope.$apply(function() {
+                  return scope.clearErrorTooltip();
+                });
+              });
+            });
+          };
+          return baseBcFormFieldError.OnLink(scope, element, attrs, formCtrl);
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.form-date-of-birth-field-error', []).directive('bcFormDateOfBirthFieldError', [
+    '$timeout', function($timeout) {
+      return {
+        restrict: "A",
+        require: "^form",
+        scope: true,
+        link: function(scope, element, attrs, formCtrl) {
+          scope.subFields = ['month', 'day', 'year'];
+          scope.subFieldElement = function(subField) {
+            return element.find('#' + attrs.bcFormFieldId + '_' + subField);
+          };
+          scope.subFieldChosenElement = function(subField) {
+            return element.find('#' + attrs.bcFormFieldId + '_' + subField + '_chosen');
+          };
+          scope.modelCtrls = {};
+          angular.forEach(scope.subFields, function(subField) {
+            return scope.modelCtrls[subField] = formCtrl[attrs.bcFormFieldId + '_' + subField];
+          });
+          scope.errorTooltipSet = false;
+          scope.getTooltipTarget = function() {
+            return scope.subFieldChosenElement('day');
+          };
+          scope.displayErrorHighlight = function() {
+            if (!element.hasClass('bc-form-error')) {
+              return element.addClass('bc-form-error');
+            }
+          };
+          scope.clearErrorHighlight = function() {
+            return element.removeClass('bc-form-error');
+          };
+          scope.displayErrorTooltip = function(error) {
+            var targetElement;
+            scope.clearErrorTooltip();
+            scope.errorTooltipSet = true;
+            targetElement = scope.getTooltipTarget();
+            targetElement.tooltip({
+              trigger: 'manual',
+              placement: 'bottom',
+              title: error.toString()
+            });
+            return targetElement.tooltip('show');
+          };
+          scope.clearErrorTooltip = function() {
+            if (scope.errorTooltipSet) {
+              scope.errorTooltipSet = false;
+              return scope.getTooltipTarget().tooltip('destroy');
+            }
+          };
+          scope.displayError = function(error) {
+            scope.displayErrorHighlight();
+            return scope.displayErrorTooltip(error);
+          };
+          scope.$on('bcFormSubmit', function(evt, formName) {
+            if (formName !== formCtrl.$name) {
+              return;
+            }
+            scope.bcFormSubmitAttempt = true;
+            return scope.updateVisibleErrorState();
+          });
+          scope.$on('bcFormReset', function(evt, formName) {
+            if (formName !== formCtrl.$name) {
+              return;
+            }
+            scope.bcFormSubmitAttempt = false;
+            scope.clearErrorTooltip();
+            scope.clearErrorHighlight();
+            return angular.forEach(scope.subFields, function(subField) {
+              scope.modelCtrls[subField].$dirty = false;
+              scope.modelCtrls[subField].$pristine = true;
+              return scope.subFieldElement(subField).removeClass('ng-dirty').addClass('ng-pristine');
+            });
+          });
+          $timeout(function() {
+            return angular.forEach(scope.subFields, function(subField) {
+              return scope.subFieldElement(subField).chosen().on('chosen:showing_dropdown', function() {
+                return scope.$apply(function() {
+                  return scope.clearErrorTooltip();
+                });
+              });
+            });
+          });
+          scope.hasClientFieldErrors = function() {
+            return _.reduce(scope.subFields, function(result, subField) {
+              return scope.modelCtrls[subField].$error['required'] || result;
+            }, false);
+          };
+          scope.updateVisibleErrorState = function() {
+            if (scope.hasClientFieldErrors()) {
+              return scope.displayError("Date Of Birth required");
+            } else {
+              scope.clearErrorTooltip();
+              return scope.clearErrorHighlight();
+            }
+          };
+          scope.shouldDisplayError = function(subField) {
+            return scope.bcFormSubmitAttempt || scope.isFieldComplete();
+          };
+          scope.isFieldComplete = function() {
+            return _.reduce(scope.subFields, function(result, subField) {
+              return result && scope.modelCtrls[subField].$dirty;
+            }, true);
+          };
+          return angular.forEach(scope.subFields, function(subField) {
+            var subFieldName;
+            subFieldName = subField;
+            return scope.$watch(function() {
+              return scope.modelCtrls[subFieldName].$error;
+            }, function() {
+              if (scope.shouldDisplayError(subFieldName)) {
+                return scope.updateVisibleErrorState(subFieldName);
+              }
+            }, true);
+          });
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.form-hidden-field-error', ['bc.base-form-field-error']).directive('bcFormHiddenFieldError', [
+    'baseBcFormFieldError', function(baseBcFormFieldError) {
+      return {
+        restrict: "A",
+        require: "^form",
+        scope: true,
+        link: function(scope, element, attrs, formCtrl) {
+          scope.getInputElement = function() {
+            return element.find('#' + attrs.bcFormFieldId);
+          };
+          scope.getTooltipTarget = function() {
+            return element;
+          };
+          scope.setFieldFocusHandler = function() {};
+          scope.setFieldBlurHandler = function() {};
+          return baseBcFormFieldError.OnLink(scope, element, attrs, formCtrl);
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.form-text-field-error', ['bc.base-form-field-error', 'SafeApply']).directive('bcFormTextFieldError', [
+    'baseBcFormFieldError', function(baseBcFormFieldError) {
+      return {
+        restrict: "A",
+        require: "^form",
+        scope: true,
+        link: function(scope, element, attrs, formCtrl) {
+          scope.getInputElement = function() {
+            return element.find('#' + attrs.bcFormFieldId);
+          };
+          scope.getTooltipTarget = function() {
+            return element.find('#' + attrs.bcFormFieldId);
+          };
+          scope.setFieldFocusHandler = function() {
+            return scope.getTooltipTarget().focus(function() {
+              return scope.$safeApply(function() {
+                return scope.clearErrorTooltip();
+              });
+            });
+          };
+          scope.setFieldBlurHandler = function() {
+            return scope.getTooltipTarget().blur(function() {
+              return scope.$safeApply(function() {
+                return scope.updateBlurPassiveErrorState();
+              });
+            });
+          };
+          return baseBcFormFieldError.OnLink(scope, element, attrs, formCtrl);
         }
       };
     }
@@ -317,6 +529,151 @@
         return data;
       }
       return data.slice(index, data.length);
+    };
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('bc.base-form-field-error', []).service('baseBcFormFieldError', function() {
+    return {
+      OnLink: function(scope, element, attrs, formCtrl) {
+        scope.getInputElement || (scope.getInputElement = function() {});
+        scope.getTooltipTarget || (scope.getTooltipTarget = function() {});
+        scope.setFieldFocusHandler || (scope.setFieldFocusHandler = function() {});
+        scope.setFieldBlurHandler || (scope.setFieldBlurHandler = function() {});
+        scope.errorTooltipSet = false;
+        scope.modelCtrl = formCtrl[attrs.bcFormFieldId];
+        attrs.bcFormFieldErrorTooltipPlacement = attrs.bcFormFieldErrorTooltipPlacement || 'bottom';
+        scope.setServerError = function(error) {
+          scope.bcServerError = error;
+          return scope.modelCtrl.$setValidity('server', false);
+        };
+        scope.clearServerError = function() {
+          delete scope.bcServerError;
+          return scope.modelCtrl.$setValidity('server', true);
+        };
+        scope.$on('formFieldServerError', function(event, error) {
+          if (error.errorFieldId === attrs.bcFormFieldId) {
+            return scope.setServerError(error.toString());
+          }
+        });
+        scope.$on('customFieldError', function(event, error) {
+          if (error.errorFieldId === attrs.bcFormFieldId) {
+            return scope.modelCtrl.$setValidity(error.errorCode, !error.hasError);
+          }
+        });
+        scope.onValueChange = function(value) {
+          scope.clearServerError();
+          return value;
+        };
+        scope.modelCtrl.$parsers.push(scope.onValueChange);
+        scope.modelCtrl.$formatters.push(scope.onValueChange);
+        scope.displayErrorHighlight = function() {
+          if (!element.hasClass('bc-form-error')) {
+            return element.addClass('bc-form-error');
+          }
+        };
+        scope.clearErrorHighlight = function() {
+          return element.removeClass('bc-form-error');
+        };
+        scope.displayErrorTooltip = function(error) {
+          var targetElement;
+          scope.clearErrorTooltip();
+          scope.errorTooltipSet = true;
+          targetElement = scope.getTooltipTarget();
+          targetElement.tooltip({
+            trigger: 'manual',
+            title: error.toString(),
+            placement: attrs.bcFormFieldErrorTooltipPlacement
+          });
+          return targetElement.tooltip('show');
+        };
+        scope.clearErrorTooltip = function() {
+          if (scope.errorTooltipSet) {
+            scope.errorTooltipSet = false;
+            return scope.getTooltipTarget().tooltip('destroy');
+          }
+        };
+        scope.displayError = function(error) {
+          scope.displayErrorHighlight();
+          return scope.displayErrorTooltip(error);
+        };
+        scope.$on('bcFormSubmit', function(evt, formName) {
+          if (formName !== formCtrl.$name) {
+            return;
+          }
+          scope.bcFormSubmitAttempt = true;
+          scope.updateActiveErrorState();
+          return scope.updateAllPassiveErrorState();
+        });
+        scope.$on('bcFormReset', function(evt, formName) {
+          var inputElement;
+          if (formName !== formCtrl.$name) {
+            return;
+          }
+          scope.bcFormSubmitAttempt = false;
+          scope.clearErrorTooltip();
+          scope.clearErrorHighlight();
+          scope.modelCtrl.$dirty = false;
+          scope.modelCtrl.$pristine = true;
+          inputElement = scope.getInputElement();
+          return inputElement.removeClass('ng-dirty').addClass('ng-pristine');
+        });
+        scope.setFieldFocusHandler();
+        scope.setFieldBlurHandler();
+        scope.updateActiveErrorState = function() {
+          var displayName;
+          if (scope.bcServerError) {
+            return scope.displayError(scope.bcServerError);
+          } else if (scope.modelCtrl.$error['validOrderAmountNumber']) {
+            displayName = attrs.bcFormFieldDisplayName || 'Order amount';
+            return scope.displayError(displayName + ' must be a valid number');
+          } else if (scope.modelCtrl.$error['bcDecimalError']) {
+            return scope.displayError('Enter a valid number');
+          } else if (scope.modelCtrl.$error['validAccountBalanceLimit']) {
+            return scope.displayError('Amount exceeds your account balance');
+          } else if (scope.modelCtrl.$error['withdrawalLimit']) {
+            return scope.displayError('Amount exceeds your withdrawal limit');
+          } else {
+            scope.clearErrorTooltip();
+            return scope.clearErrorHighlight();
+          }
+        };
+        scope.updateAllPassiveErrorState = function() {
+          scope.updateBlurPassiveErrorState();
+          return scope.updateSubmitPassiveErrorState();
+        };
+        scope.updateBlurPassiveErrorState = function() {
+          if (scope.modelCtrl.$error['email']) {
+            return scope.displayError('Enter a valid Email address');
+          } else if (scope.modelCtrl.$error['validPhoneNumber']) {
+            return scope.displayError('Enter a valid phone number');
+          }
+        };
+        scope.updateSubmitPassiveErrorState = function() {
+          var displayName;
+          if (scope.modelCtrl.$error['required']) {
+            displayName = attrs.bcFormFieldDisplayName || element.find('label').text();
+            return scope.displayError(displayName + " required");
+          } else if (scope.modelCtrl.$error['passwordStrength']) {
+            return scope.displayError('Choose a stronger password');
+          } else if (scope.modelCtrl.$error['validOrderAmountPositive']) {
+            displayName = attrs.bcFormFieldDisplayName || 'Order amount';
+            return scope.displayError(displayName + ' must be positive');
+          }
+        };
+        scope.onChangeEvent = function() {
+          scope.updateActiveErrorState();
+          return scope.$broadcast('bcFormErrorUpdate');
+        };
+        scope.$watch(function() {
+          return scope.modelCtrl.$modelValue;
+        }, scope.onChangeEvent, true);
+        return scope.$watch(function() {
+          return scope.modelCtrl.$error;
+        }, scope.onChangeEvent, true);
+      }
     };
   });
 

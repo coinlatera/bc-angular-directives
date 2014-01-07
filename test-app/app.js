@@ -73,7 +73,10 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
   $scope.emptySelected = '';
   $scope.emptyItems = [];
 
-  $scope.formSelected = {};
+  $scope.form = {
+    text: '',
+    select: ''
+  };
   $scope.formItems = [
     {
       name: 'Item 1'
@@ -91,5 +94,9 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
     var res = $q.defer();
     res.resolve({});
     return res.promise
+  };
+  $scope.onFormSuccess = function() {
+    $scope.form.text = '';
+    $scope.form.select = '';
   };
 });

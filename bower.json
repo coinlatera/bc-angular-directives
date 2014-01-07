@@ -1,6 +1,6 @@
 {
   "name": "bc-angular-directives",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/buttercoin/bc-angular-directives",
   "authors": [
     "Matthis <matthis.perrin@gmail.com>"
@@ -25,8 +25,8 @@
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",
-    "bc-utilities": "*",
+    "bc-utilities": "master",
     "jquery": "2.0.3",
-    "chosen": "https://github.com/harvesthq/chosen/releases/download/1.0.0/chosen_v1.0.0.zip"
+    "chosen": "git@github.com:buttercoin/chosen.git#master"
   }
 }

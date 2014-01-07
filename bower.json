@@ -21,7 +21,9 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.0.8"
+    "angular": "~1.0.8",
+    "bc-angular-models": "master",
+    "bc-angular-notification": "master"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",

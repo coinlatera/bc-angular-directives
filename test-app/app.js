@@ -1,6 +1,12 @@
-var app = angular.module('test-app', ['bc.angular-directives']);
+var app = angular.module('test-app', ['bc.angular-directives', 'bc.angular-notification', 'bc.angular-models']);
 
-app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout) {
+app.service('NotificationsStore', ['NotificationsBuilder', function(NotificationsBuilder) {
+  this.getNotification = function(type, message, detailedMessage, displayMode, urgent, showInDropdown, params, duration) {
+    NotificationBuilder.buildNotification(type, message, detailedMessage, displayMode, urgent, showInDropdown, params, duration);
+  };
+}]);
+
+app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
   ///////////////
   // BC-TABLE
   $scope.tableConfig = {
@@ -79,5 +85,11 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout) {
       name: 'Item 3'
     }
   ];
+  $scope.onFormSubmit = function() {
+    alert('Cool! Submit!');
   
+    var res = $q.defer();
+    res.resolve({});
+    return res.promise
+  };
 });

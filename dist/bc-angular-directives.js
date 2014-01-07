@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-directives', ['bc.table', 'bc.chosen', 'bc.switch']);
+  angular.module('bc.angular-directives', ['bc.form', 'bc.table', 'bc.chosen', 'bc.switch']);
 
 }).call(this);
 
@@ -86,6 +86,89 @@
               }
             });
           }
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.form', ['bc.angular-models', 'bc.angular-notification']).directive('bcForm', [
+    '$parse', '$q', 'ErrorMessage', 'Notifications', 'NotificationsStore', function($parse, $q, ErrorMessage, Notifications, NotificationsStore) {
+      return {
+        restrict: "A",
+        require: "^form",
+        link: function(scope, formElement, attrs, formCtrl) {
+          var initialText, loadingMessage, onFailureFn, onSubmitFn, onSuccessFn, resetForm, setFormLoading, submitButton, unsetFormLoading;
+          formElement.addClass('bc-form');
+          submitButton = formElement.find('input[type=submit]');
+          initialText = submitButton.val() || 'Submit';
+          loadingMessage = attrs.bcFormLoadingMessage || "Loading...";
+          submitButton.data('bc-form-submit-text', initialText);
+          submitButton.data('bc-form-loading-text', loadingMessage);
+          onSuccessFn = attrs.bcFormOnSuccess ? $parse(attrs.bcFormOnSuccess) : function() {};
+          onFailureFn = attrs.bcFormOnFailure ? $parse(attrs.bcFormOnFailure) : function() {};
+          onSubmitFn = attrs.bcFormOnSubmit ? $parse(attrs.bcFormOnSubmit) : function() {
+            var emptyDeferred;
+            emptyDeferred = $q.defer();
+            emptyDeferred.resolve({});
+            return emptyDeferred.promise;
+          };
+          formElement.bind('submit', function() {
+            return scope.$apply(function() {
+              scope.$broadcast('bcFormSubmit', formCtrl.$name);
+              scope.$broadcast('bcFormErrorUpdate');
+              if (formCtrl.$invalid) {
+                return false;
+              }
+              setFormLoading();
+              return onSubmitFn(scope).then(function(successResult) {
+                if (attrs.bcFormReset) {
+                  resetForm();
+                }
+                unsetFormLoading();
+                onSuccessFn(scope, {
+                  successResult: successResult
+                });
+                return successResult;
+              }, function(failureResult) {
+                var errorMessages;
+                unsetFormLoading();
+                errorMessages = ErrorMessage.FromMessage(failureResult);
+                angular.forEach(errorMessages.errors, function(error) {
+                  if (error.errorType === 'Field') {
+                    return scope.$broadcast('formFieldServerError', error);
+                  } else {
+                    return Notifications.show(NotificationsStore.getNotification('error', error.toString(), '', 'active', false));
+                  }
+                });
+                onFailureFn(scope, {
+                  failureResult: failureResult
+                });
+                throw failureResult;
+              });
+            });
+          });
+          setFormLoading = function() {
+            submitButton = formElement.find('input[type=submit]');
+            loadingMessage = submitButton.data('bc-form-loading-text');
+            return submitButton.val(loadingMessage).attr('disabled', true);
+          };
+          unsetFormLoading = function() {
+            var previousText;
+            submitButton = formElement.find('input[type=submit]');
+            previousText = submitButton.data('bc-form-submit-text');
+            return submitButton.val(previousText).attr('disabled', false);
+          };
+          resetForm = function() {
+            formCtrl.$dirty = false;
+            formCtrl.$pristine = true;
+            scope.$broadcast('bcFormErrorUpdate');
+            scope.$broadcast('bcFormReset', formCtrl.$name);
+            return formElement.removeClass('ng-dirty').addClass('ng-pristine');
+          };
+          return formCtrl.bcResetForm = resetForm;
         }
       };
     }

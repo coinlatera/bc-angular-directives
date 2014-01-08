@@ -109,6 +109,10 @@ angular.module('bc.base-form-field-error', []).service 'baseBcFormFieldError', -
         scope.displayError 'Amount exceeds your account balance'
       else if scope.modelCtrl.$error['withdrawalLimit']
         scope.displayError 'Amount exceeds your withdrawal limit'
+      else if scope.modelCtrl.$error['withdrawalLimitMax']
+        scope.displayError 'Amount exceeds your withdrawal limit'
+      else if scope.modelCtrl.$error['withdrawalLimitMin']
+        scope.displayError 'Amount is below your withdrawal limit'
       else
         scope.clearErrorTooltip()
         scope.clearErrorHighlight()

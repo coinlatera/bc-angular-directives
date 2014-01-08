@@ -644,6 +644,10 @@
             return scope.displayError('Amount exceeds your account balance');
           } else if (scope.modelCtrl.$error['withdrawalLimit']) {
             return scope.displayError('Amount exceeds your withdrawal limit');
+          } else if (scope.modelCtrl.$error['withdrawalLimitMax']) {
+            return scope.displayError('Amount exceeds your withdrawal limit');
+          } else if (scope.modelCtrl.$error['withdrawalLimitMin']) {
+            return scope.displayError('Amount is below your withdrawal limit');
           } else {
             scope.clearErrorTooltip();
             return scope.clearErrorHighlight();

@@ -113,6 +113,8 @@ angular.module('bc.base-form-field-error', []).service 'baseBcFormFieldError', -
         scope.displayError 'Amount exceeds your withdrawal limit'
       else if scope.modelCtrl.$error['withdrawalLimitMin']
         scope.displayError 'Amount is below your withdrawal limit'
+      else if scope.modelCtrl.$error['bitcoinAddress']
+        scope.displayError 'Invalid Bitcoin address'
       else
         scope.clearErrorTooltip()
         scope.clearErrorHighlight()

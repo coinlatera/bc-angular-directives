@@ -18,8 +18,8 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ->
               '<span ng-show="header.sortable">' +
                 '<span ng-switch on="currentSort.headerIndex - $index">' +
                   '<span ng-switch-when="0">' +
-                    '<i ng-show="currentSort.reverse" class="icon icon-caret-up"></i>' +
-                    '<i ng-hide="currentSort.reverse" class="icon icon-caret-down"></i>' +
+                    '<i ng-show="currentSort.reverse" class="icon icon-caret-down"></i>' +
+                    '<i ng-hide="currentSort.reverse" class="icon icon-caret-uo"></i>' +
                   '</span>' +
                   '<span ng-switch-default><i class="icon icon-sort"></i></span>' +
                 '</span>' +

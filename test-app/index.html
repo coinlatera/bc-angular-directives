@@ -30,7 +30,7 @@
             <input id="textField" name="textField" type="text" ng-model="form.text" required>
           </div>
         </div>
-	<div bc-form-chosen-field-error bc-form-field-id="selectField">
+        <div bc-form-chosen-field-error bc-form-field-id="selectField">
           <label for="selectField">Select Field</label>
           <div class="controls">
             <select chosen id="selectField" name="selectField" data-placeholder="Select Something..." no-results-text="'No Bank Account'" disable-search="true" ng-model="form.select" width="200" ng-options="item.name for item in formItems" required></select>

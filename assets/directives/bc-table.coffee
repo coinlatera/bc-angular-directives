@@ -1,4 +1,4 @@
-angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ->
+angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ['$sce', ($sce) ->
   restrict: 'E'
 
   replace: true
@@ -30,9 +30,9 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ->
         '<tbody>' +
           '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' +
             '<td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle" ng-class="header.customContentClass">' +
-              '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></span></div>' +
-              '<div ng-switch-when="link"><a href="#" onclick="return false;" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html-unsafe="line[header.key].title"></a></div>' +
-              '<div ng-switch-default ng-bind-html-unsafe="header.format(line[header.key])"></div>' +
+              '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html="getSafeValue(line[header.key].title)"></span></div>' +
+              '<div ng-switch-when="link"><a href="#" onclick="return false;" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html="getSafeValue(line[header.key].title)"></a></div>' +
+              '<div ng-switch-default ng-bind-html="getSafeValue(header.format(line[header.key]))"></div>' +
             '</td>' +
           '</tr>' +
         '</tbody>' +
@@ -122,3 +122,7 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ->
     scope.lineClick = (line) ->
       if exist scope.config.lineClick
         scope.config.lineClick line
+
+    scope.getSafeValue = (value) ->
+      return $sce.trustAsHtml value
+]

@@ -648,8 +648,6 @@
             return scope.displayError('Amount exceeds your withdrawal limit');
           } else if (scope.modelCtrl.$error['withdrawalLimitMin']) {
             return scope.displayError('Amount is below your withdrawal limit');
-          } else if (scope.modelCtrl.$error['bitcoinAddress']) {
-            return scope.displayError('Invalid Bitcoin address');
           } else {
             scope.clearErrorTooltip();
             return scope.clearErrorHighlight();
@@ -664,6 +662,8 @@
             return scope.displayError('Enter a valid Email address');
           } else if (scope.modelCtrl.$error['validPhoneNumber']) {
             return scope.displayError('Enter a valid phone number');
+          } else if (scope.modelCtrl.$error['bitcoinAddress']) {
+            return scope.displayError('Invalid Bitcoin address');
           }
         };
         scope.updateSubmitPassiveErrorState = function() {

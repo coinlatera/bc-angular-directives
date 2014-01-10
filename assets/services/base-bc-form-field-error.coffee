@@ -113,8 +113,6 @@ angular.module('bc.base-form-field-error', []).service 'baseBcFormFieldError', -
         scope.displayError 'Amount exceeds your withdrawal limit'
       else if scope.modelCtrl.$error['withdrawalLimitMin']
         scope.displayError 'Amount is below your withdrawal limit'
-      else if scope.modelCtrl.$error['bitcoinAddress']
-        scope.displayError 'Invalid Bitcoin address'
       else
         scope.clearErrorTooltip()
         scope.clearErrorHighlight()
@@ -130,6 +128,8 @@ angular.module('bc.base-form-field-error', []).service 'baseBcFormFieldError', -
         scope.displayError 'Enter a valid Email address'
       else if scope.modelCtrl.$error['validPhoneNumber']
         scope.displayError 'Enter a valid phone number'
+      else if scope.modelCtrl.$error['bitcoinAddress']
+        scope.displayError 'Invalid Bitcoin address'
 
     scope.updateSubmitPassiveErrorState = ->
       if scope.modelCtrl.$error['required']

@@ -25,8 +25,8 @@
     "angular": "~1.0.8",
     "bootstrap": "2.3.2",
     "bc-utilities": "master",
-    "bc-angular-models": "master",
-    "bc-angular-notification": "master",
+    "bc-angular-models": "angular-1.0.8",
+    "bc-angular-notification": "angular-1.0.8",
     "chosen": "git@github.com:buttercoin/chosen.git#master",
     "angular-safeapply": "https://github.com/buttercoin/angular-safeapply.git#1.0.5"
   },

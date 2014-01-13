@@ -1,8 +1,9 @@
 <html ng-app="test-app">
   <head>
-    <link rel="stylesheet" href="../bower_components/chosen/chosen.css">
+    <link rel="stylesheet" href="../bower_components/chosen/public/chosen.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
     <script src="../bower_components/jquery/jquery.js"></script>
-    <script src="../bower_components/chosen/chosen.jquery.js"></script>
+    <script src="../bower_components/chosen/public/chosen.jquery.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/angular-safeapply/safe-apply.js"></script>
     <script src="../bower_components/bootstrap/js/bootstrap-tooltip.js"></script>
@@ -29,7 +30,7 @@
             <input id="textField" name="textField" type="text" ng-model="form.text" required>
           </div>
         </div>
-	<div bc-form-chosen-field-error bc-form-field-id="selectField">
+        <div bc-form-chosen-field-error bc-form-field-id="selectField">
           <label for="selectField">Select Field</label>
           <div class="controls">
             <select chosen id="selectField" name="selectField" data-placeholder="Select Something..." no-results-text="'No Bank Account'" disable-search="true" ng-model="form.select" width="200" ng-options="item.name for item in formItems" required></select>

@@ -1,6 +1,6 @@
 {
   "name": "bc-angular-directives",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "homepage": "https://github.com/buttercoin/bc-angular-directives",
   "authors": [
     "Matthis <matthis.perrin@gmail.com>"
@@ -22,11 +22,11 @@
   ],
   "dependencies": {
     "jquery": "2.0.3",
-    "angular": "~1.0.8",
+    "angular": "1.2.8",
     "bootstrap": "2.3.2",
     "bc-utilities": "master",
-    "bc-angular-models": "master",
-    "bc-angular-notification": "master",
+    "bc-angular-models": "angular-upgrade",
+    "bc-angular-notification": "angular-upgrade",
     "chosen": "git@github.com:buttercoin/chosen.git#master",
     "angular-safeapply": "https://github.com/buttercoin/angular-safeapply.git#1.0.5"
   },

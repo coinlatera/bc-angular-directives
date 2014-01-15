@@ -19,7 +19,7 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
       filterKeys: ['name']
     },
     radio: {
-      filterValue: 'all',
+      filterValue: '_radio_all_',
       filterKeys: ['radio']
     }
   }

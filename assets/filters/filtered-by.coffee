@@ -1,3 +1,4 @@
+# Allows filtering based on text input that matches any substring of the target key value
 angular.module('filtered-by', []).filter 'filteredBy', () ->
   (data, keys, value) ->
 

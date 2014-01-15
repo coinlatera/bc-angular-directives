@@ -514,12 +514,24 @@
 }).call(this);
 
 (function() {
-  angular.module('filtered-by-radio', ['filtered-by']).filter('filteredByRadio', function($filter) {
+  angular.module('filtered-by-radio', []).filter('filteredByRadio', function() {
     return function(data, keys, value) {
-      if (value === 'all') {
+      var filtered, key, obj, _i, _j, _len, _len1;
+      if (!exist(keys) || keys.length === 0 || !exist(value) || !(type(value === 'string')) || value === '_radio_all_') {
         return data;
       }
-      return $filter('filteredBy')(data, keys, value);
+      filtered = [];
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        obj = data[_i];
+        for (_j = 0, _len1 = keys.length; _j < _len1; _j++) {
+          key = keys[_j];
+          if (obj[key] === value) {
+            filtered.push(obj);
+            break;
+          }
+        }
+      }
+      return filtered;
     };
   });
 

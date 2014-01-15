@@ -13,6 +13,14 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
     tableClass: 'table-class',
     lineClick: function (line) {
       // alert(line.money);
+    },
+    filter: {
+      filterValue: '',
+      filterKeys: ['name']
+    },
+    radio: {
+      filterValue: 'all',
+      filterKeys: ['radio']
     }
   }
 
@@ -26,17 +34,18 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
   $scope.tableModel = [
     {
       name: 'Homer',
+      radio: 'homer',
       money: '1000',
       button: {
         type: 'button',
-        title: 'Button',
+        title: 'Homer Button',
         callback: function (line) {
           alert(line.money);
         }
       },
       link: {
         type: 'link',
-        title: 'Link',
+        title: 'Homer Link',
         callback: function (line) {
           alert(line.money);
         }
@@ -44,17 +53,37 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
     },
     {
       name: 'Luke',
+      radio: 'luke',
       money: '5000',
       button: {
         type: 'button',
-        title: 'Button',
+        title: 'Luke Button',
         callback: function (line) {
           alert(line.money);
         }
       },
       link: {
         type: 'link',
-        title: 'Link',
+        title: 'Luke Link',
+        callback: function (line) {
+          alert(line.money);
+        }
+      }
+    },
+    {
+      name: 'Lucas',
+      radio: 'luke',
+      money: '10000',
+      button: {
+        type: 'button',
+        title: 'Lucas Button',
+        callback: function (line) {
+          alert(line.money);
+        }
+      },
+      link: {
+        type: 'link',
+        title: 'Lucas Link',
         callback: function (line) {
           alert(line.money);
         }

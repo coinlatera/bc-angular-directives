@@ -1,4 +1,4 @@
-angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ['$sce', ($sce) ->
+angular.module('bc.table', ['start-at', 'filtered-by', 'filtered-by-radio']).directive 'bcTable', ['$sce', ($sce) ->
   restrict: 'E'
 
   replace: true
@@ -28,7 +28,7 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ['$
           '</tr>' +
         '</thead>' +
         '<tbody>' +
-          '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' +
+          '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | filteredByRadio:radio.filterKeys:radio.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' +
             '<td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle" ng-class="header.customContentClass">' +
               '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html="getSafeValue(line[header.key].title)"></span></div>' +
               '<div ng-switch-when="link"><a href="#" onclick="return false;" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html="getSafeValue(line[header.key].title)"></a></div>' +
@@ -37,7 +37,7 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ['$
           '</tr>' +
         '</tbody>' +
       '</table>' +
-      '<div class="right pagination" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div>' +
+      '<div class="right pagination" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue | filteredByRadio:radio.filterKeys:radio.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div>' +
     '</div>'
 
   link: (scope, element, attrs) ->
@@ -70,6 +70,7 @@ angular.module('bc.table', ['start-at', 'filtered-by']).directive 'bcTable', ['$
       scope.data = scope.tableModel
       scope.config = scope.tableConfig
       scope.filter = if exist scope.config.filter then scope.config.filter else {}
+      scope.radio = if exist scope.config.radio then scope.config.radio else {}
 
       # Update pagination variable
       if exist scope.config.pagination

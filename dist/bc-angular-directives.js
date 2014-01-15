@@ -421,7 +421,7 @@
 }).call(this);
 
 (function() {
-  angular.module('bc.table', ['start-at', 'filtered-by']).directive('bcTable', [
+  angular.module('bc.table', ['start-at', 'filtered-by', 'filtered-by-radio']).directive('bcTable', [
     '$sce', function($sce) {
       return {
         restrict: 'E',
@@ -431,7 +431,7 @@
           headerModel: '=',
           tableModel: '='
         },
-        template: '<div>' + '<table ng-class="config.tableClass">' + '<thead>' + '<tr>' + '<th ng-repeat="header in headers" ng-style="{width: header.width}" ng-class="header.classNames" ng-click="headerClick(header, $index)">' + '{{header.processedLabel}}' + '<span ng-show="header.sortable">' + '<span ng-switch on="currentSort.headerIndex - $index">' + '<span ng-switch-when="0">' + '<i ng-show="currentSort.reverse" class="icon icon-caret-down"></i>' + '<i ng-hide="currentSort.reverse" class="icon icon-caret-up"></i>' + '</span>' + '<span ng-switch-default><i class="icon icon-sort"></i></span>' + '</span>' + '</span>' + '</th>' + '</tr>' + '</thead>' + '<tbody>' + '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' + '<td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle" ng-class="header.customContentClass">' + '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html="getSafeValue(line[header.key].title)"></span></div>' + '<div ng-switch-when="link"><a href="#" onclick="return false;" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html="getSafeValue(line[header.key].title)"></a></div>' + '<div ng-switch-default ng-bind-html="getSafeValue(header.format(line[header.key]))"></div>' + '</td>' + '</tr>' + '</tbody>' + '</table>' + '<div class="right pagination" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div>' + '</div>',
+        template: '<div>' + '<table ng-class="config.tableClass">' + '<thead>' + '<tr>' + '<th ng-repeat="header in headers" ng-style="{width: header.width}" ng-class="header.classNames" ng-click="headerClick(header, $index)">' + '{{header.processedLabel}}' + '<span ng-show="header.sortable">' + '<span ng-switch on="currentSort.headerIndex - $index">' + '<span ng-switch-when="0">' + '<i ng-show="currentSort.reverse" class="icon icon-caret-down"></i>' + '<i ng-hide="currentSort.reverse" class="icon icon-caret-up"></i>' + '</span>' + '<span ng-switch-default><i class="icon icon-sort"></i></span>' + '</span>' + '</span>' + '</th>' + '</tr>' + '</thead>' + '<tbody>' + '<tr ng-repeat="line in data | filteredBy:filter.filterKeys:filter.filterValue | filteredByRadio:radio.filterKeys:radio.filterValue | orderBy:currentSort.sortingKey:currentSort.reverse | startAt:(currentPage - 1) * pageSize | limitTo:pageSize" ng-click="lineClick(line)" ng-class="{\'clickable-row\': config.lineClick}">' + '<td ng-repeat="header in headers" ng-switch on="line[header.key].type" class="wide middle" ng-class="header.customContentClass">' + '<div ng-switch-when="button"><span class="btn" href="#" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html="getSafeValue(line[header.key].title)"></span></div>' + '<div ng-switch-when="link"><a href="#" onclick="return false;" ng-click="line[header.key].callback(line)" ng-class="line[header.key].classNames" ng-bind-html="getSafeValue(line[header.key].title)"></a></div>' + '<div ng-switch-default ng-bind-html="getSafeValue(header.format(line[header.key]))"></div>' + '</td>' + '</tr>' + '</tbody>' + '</table>' + '<div class="right pagination" ng-show="showPagination"><pagination total-items="(data | filteredBy:filter.filterKeys:filter.filterValue | filteredByRadio:radio.filterKeys:radio.filterValue).length || 1" items-per-page="pageSize" page="currentPage"></pagination></div>' + '</div>',
         link: function(scope, element, attrs) {
           var modelChanged;
           scope.currentSort = {
@@ -454,6 +454,7 @@
             scope.data = scope.tableModel;
             scope.config = scope.tableConfig;
             scope.filter = exist(scope.config.filter) ? scope.config.filter : {};
+            scope.radio = exist(scope.config.radio) ? scope.config.radio : {};
             if (exist(scope.config.pagination)) {
               scope.showPagination = true;
               scope.pageSize = scope.config.pagination.pageSize;
@@ -509,6 +510,18 @@
       };
     }
   ]);
+
+}).call(this);
+
+(function() {
+  angular.module('filtered-by-radio', ['filtered-by']).filter('filteredByRadio', function($filter) {
+    return function(data, keys, value) {
+      if (value === 'all') {
+        return data;
+      }
+      return $filter('filteredBy')(data, keys, value);
+    };
+  });
 
 }).call(this);
 

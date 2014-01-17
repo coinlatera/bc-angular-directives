@@ -352,7 +352,7 @@
                   if (error.errorType === 'Field') {
                     return scope.$broadcast('formFieldServerError', error);
                   } else {
-                    return Notifications.show(NotificationsStore.getNotification('error', error.toString(), '', 'active', false));
+                    return Notifications.show(NotificationsStore.server_notification(error.toString()));
                   }
                 });
                 onFailureFn(scope, {

@@ -49,7 +49,7 @@ angular.module('bc.form', ['bc.angular-models', 'bc.angular-notification']).dire
             if error.errorType is 'Field'
               scope.$broadcast('formFieldServerError', error)
             else
-              Notifications.show NotificationsStore.getNotification('error', error.toString(), '', 'active', false)
+              Notifications.show NotificationsStore.server_notification error.toString()
 
           # Now call any failure callbacks and return result
           onFailureFn(scope, failureResult: failureResult)

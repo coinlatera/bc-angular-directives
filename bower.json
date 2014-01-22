@@ -1,6 +1,6 @@
 {
   "name": "bc-angular-directives",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "homepage": "https://github.com/buttercoin/bc-angular-directives",
   "authors": [
     "Matthis <matthis.perrin@gmail.com>"
@@ -23,6 +23,7 @@
   "dependencies": {
     "jquery": "2.0.3",
     "angular": "1.2.8",
+    "angular-animate": "1.2.8",
     "bootstrap": "2.3.2",
     "bc-utilities": "master",
     "bc-angular-models": "master",

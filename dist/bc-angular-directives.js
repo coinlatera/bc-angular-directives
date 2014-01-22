@@ -328,7 +328,7 @@
             return emptyDeferred.promise;
           };
           formElement.bind('submit', function() {
-            return scope.$apply(function() {
+            return scope.$safeApply(function() {
               scope.$broadcast('bcFormSubmit', formCtrl.$name);
               scope.$broadcast('bcFormErrorUpdate');
               if (formCtrl.$invalid) {

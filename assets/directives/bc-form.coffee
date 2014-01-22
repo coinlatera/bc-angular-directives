@@ -23,7 +23,7 @@ angular.module('bc.form', ['bc.angular-models', 'bc.angular-notification']).dire
       emptyDeferred.promise
 
     formElement.bind 'submit', ->
-      scope.$apply ->
+      scope.$safeApply ->
         # Broadcast to all child scopes that form submission is happening
         scope.$broadcast('bcFormSubmit', formCtrl.$name)
         scope.$broadcast('bcFormErrorUpdate')

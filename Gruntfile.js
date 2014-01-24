@@ -25,6 +25,10 @@ module.exports = function (grunt) {
       reload: {
         files: ['<%= yeoman.testApp %>/{,*/}*'],
         tasks: ['livereload']
+      },
+      jsTest: {
+        files: ['test/{,*/}*.js'],
+        tasks: ['karma']
       }
     },
     connect: {
@@ -60,7 +64,8 @@ module.exports = function (grunt) {
             '!<%= yeoman.dist %>/.git*'
           ]
         }]
-      }
+      },
+      server: '.tmp'
     },
     coffee: {
       dist: {
@@ -91,6 +96,14 @@ module.exports = function (grunt) {
         }
       }
     },
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'
+      },
+      e2e: {
+        configFile: 'karma-e2e.conf.js'
+      }
+    }
   });
 
   grunt.renameTask('regarde', 'watch');
@@ -98,9 +111,23 @@ module.exports = function (grunt) {
   grunt.registerTask('server', [
     'livereload-start',
     'build',
-    'connect:livereload',
+    'connect',
     'open',
     'watch'
+  ]);
+
+  grunt.registerTask('unit', [
+    'clean:server',
+    'coffee',
+    'connect',
+    'karma:unit'
+  ]);
+
+  grunt.registerTask('e2e', [
+    'clean:server',
+    'coffee',
+    'connect',
+    'karma:e2e'
   ]);
 
   grunt.registerTask('build', [

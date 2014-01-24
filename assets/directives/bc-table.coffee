@@ -75,8 +75,8 @@ angular.module('bc.table', ['start-at', 'filtered-by', 'filtered-by-radio']).dir
       # Update pagination variable
       if exist scope.config.pagination
         scope.showPagination = true
-        scope.pageSize = scope.config.pagination.pageSize
-        scope.currentPage = scope.config.pagination.currentPage
+        scope.pageSize = scope.config.pagination.pageSize || 5
+        scope.currentPage = scope.config.pagination.currentPage || 1
       else
         scope.showPagination = false
         scope.pageSize = scope.data.length
@@ -117,6 +117,7 @@ angular.module('bc.table', ['start-at', 'filtered-by', 'filtered-by-radio']).dir
         scope.currentSort.reverse = scope.currentSort.headerIndex is index and not scope.currentSort.reverse
         scope.currentSort.headerIndex = index
         scope.currentSort.sortingKey = if exist(header.sortingKey) then header.sortingKey else header.key
+        scope.currentPage = scope.config.pagination.currentPage || 1
 
 
     # Handle a click on a line

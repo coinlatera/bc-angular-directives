@@ -457,8 +457,8 @@
             scope.radio = exist(scope.config.radio) ? scope.config.radio : {};
             if (exist(scope.config.pagination)) {
               scope.showPagination = true;
-              scope.pageSize = scope.config.pagination.pageSize;
-              scope.currentPage = scope.config.pagination.currentPage;
+              scope.pageSize = scope.config.pagination.pageSize || 5;
+              scope.currentPage = scope.config.pagination.currentPage || 1;
             } else {
               scope.showPagination = false;
               scope.pageSize = scope.data.length;
@@ -495,7 +495,8 @@
             if (header.sortable) {
               scope.currentSort.reverse = scope.currentSort.headerIndex === index && !scope.currentSort.reverse;
               scope.currentSort.headerIndex = index;
-              return scope.currentSort.sortingKey = exist(header.sortingKey) ? header.sortingKey : header.key;
+              scope.currentSort.sortingKey = exist(header.sortingKey) ? header.sortingKey : header.key;
+              return scope.currentPage = scope.config.pagination.currentPage || 1;
             }
           };
           scope.lineClick = function(line) {

@@ -1,4 +1,4 @@
-var app = angular.module('test-app', ['bc.angular-directives', 'bc.angular-notification', 'bc.angular-models']);
+var app = angular.module('test-app', ['bc.angular-directives', 'bc.angular-notification', 'bc.angular-models', 'ui.bootstrap']);
 
 app.service('NotificationsStore', ['NotificationsBuilder', function(NotificationsBuilder) {
   this.getNotification = function(type, message, detailedMessage, displayMode, urgent, showInDropdown, params, duration) {
@@ -10,7 +10,10 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
   ///////////////
   // BC-TABLE
   $scope.tableConfig = {
-    tableClass: 'table-class',
+    tableClass: 'table table-hover',
+    pagination: {
+      pageSize: 5
+    },
     lineClick: function (line) {
       // alert(line.money);
     },
@@ -25,10 +28,10 @@ app.controller('MainCtrl', function MainCtrl ($scope, $filter, $timeout, $q) {
   }
 
   $scope.tableHeaderModel = [
-    { label: 'Name', key: 'name', sortable: true },
-    { label: function () { return 'Money'; }, key: 'money', sortable: true, format: function (value) { return $filter('currency')(value); } },
-    { label: 'Button', key: 'button' },
-    { label: 'Link', key: 'link' }
+    { label: 'Name ', key: 'name', sortable: true },
+    { label: function () { return 'Money '; }, key: 'money', sortingKey: function (row) { return parseFloat(row.money) }, sortable: true, format: function (value) { return $filter('currency')(value); } },
+    { label: 'Button ', key: 'button'},
+    { label: 'Link ', key: 'link'}
   ];
 
   $scope.tableModel = [

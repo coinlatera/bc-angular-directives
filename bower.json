@@ -1,6 +1,6 @@
 {
   "name": "bc-angular-directives",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "homepage": "https://github.com/buttercoin/bc-angular-directives",
   "authors": [
     "Matthis <matthis.perrin@gmail.com>"
@@ -32,6 +32,9 @@
     "angular-safeapply": "https://github.com/buttercoin/angular-safeapply.git#1.0.5"
   },
   "devDependencies": {
-    "coffee-script": "~1.6.3"
+    "coffee-script": "~1.6.3",
+    "angular-route": "1.2.8",
+    "angular-mocks": "1.2.8",
+    "angular-scenario": "1.2.8"
   }
 }

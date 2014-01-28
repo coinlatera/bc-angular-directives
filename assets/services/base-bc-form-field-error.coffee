@@ -111,6 +111,10 @@ angular.module('bc.base-form-field-error', []).service 'baseBcFormFieldError', -
         scope.displayError 'Amount exceeds single transaction limit'
       else if scope.modelCtrl.$error['singleTransactionLimitMin']
         scope.displayError 'Amount is below single transaction limit'
+      else if scope.modelCtrl.$error['cumulativeTransactionLimitMax']
+        scope.displayError 'Amount exceeds your account transaction limit'
+      else if scope.modelCtrl.$error['cumulativeTransactionLimitMin']
+        scope.displayError 'Amount is below your account transaction limit'
       else
         scope.clearErrorTooltip()
         scope.clearErrorHighlight()

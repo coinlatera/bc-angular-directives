@@ -676,11 +676,11 @@
           } else if (scope.modelCtrl.$error['singleTransactionLimitMax']) {
             return scope.displayError('Amount exceeds single transaction limit');
           } else if (scope.modelCtrl.$error['singleTransactionLimitMin']) {
-            return scope.displayError('Amount is below single transaction limit');
+            return scope.displayError('Amount is below transaction limit');
           } else if (scope.modelCtrl.$error['cumulativeTransactionLimitMax']) {
-            return scope.displayError('Amount exceeds your account transaction limit');
+            return scope.displayError('Amount exceeds account transaction limit');
           } else if (scope.modelCtrl.$error['cumulativeTransactionLimitMin']) {
-            return scope.displayError('Amount is below your account transaction limit');
+            return scope.displayError('Amount is below account transaction limit');
           } else {
             scope.clearErrorTooltip();
             return scope.clearErrorHighlight();

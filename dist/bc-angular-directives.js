@@ -679,8 +679,6 @@
             return scope.displayError('Amount is below transaction limit');
           } else if (scope.modelCtrl.$error['cumulativeTransactionLimitMax']) {
             return scope.displayError('Amount exceeds account transaction limit');
-          } else if (scope.modelCtrl.$error['cumulativeTransactionLimitMin']) {
-            return scope.displayError('Amount is below account transaction limit');
           } else {
             scope.clearErrorTooltip();
             return scope.clearErrorHighlight();

@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-directives', ['bc.form', 'bc.base-form-field-error', 'bc.form-text-field-error', 'bc.form-chosen-field-error', 'bc.form-date-of-birth-field-error', 'bc.form-hidden-field-error', 'bc.table', 'bc.chosen', 'bc.switch']);
+  angular.module('bc.angular-directives', ['bc.form', 'bc.base-form-field-error', 'bc.form-text-field-error', 'bc.form-chosen-field-error', 'bc.form-date-of-birth-field-error', 'bc.form-hidden-field-error', 'bc.table', 'bc.chosen', 'bc.switch', 'bc.highcharts']);
 
 }).call(this);
 
@@ -381,6 +381,64 @@
             return formElement.removeClass('ng-dirty').addClass('ng-pristine');
           };
           return formCtrl.bcResetForm = resetForm;
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('bc.highcharts', []).directive('bcHighcharts', [
+    '$timeout', function($timeout) {
+      return {
+        restrict: 'EAC',
+        replace: true,
+        template: '<div></div>',
+        scope: {
+          config: '=',
+          loading: '=',
+          loadingMessage: '=',
+          afterSetExtremes: '='
+        },
+        link: function(scope, element, attrs) {
+          var DEFAULT_LOADING_MESSAGE, afterSetExtremesHandler;
+          DEFAULT_LOADING_MESSAGE = 'Loading data from server...';
+          afterSetExtremesHandler = function(e) {
+            if (type(scope.afterSetExtremes === 'function')) {
+              return scope.afterSetExtremes(e, element.highcharts());
+            }
+          };
+          scope.$watch('config', function(newVal, oldVal) {
+            if (newVal && newVal !== oldVal) {
+              if (!exist(newVal.xAxis)) {
+                newVal.xAxis = {};
+              }
+              newVal.xAxis.events = {
+                afterSetExtremes: afterSetExtremesHandler
+              };
+              return element.highcharts('StockChart', newVal, function(chart) {
+                return $timeout(function() {
+                  var xExt;
+                  xExt = chart.xAxis[0].getExtremes();
+                  return chart.xAxis[0].setExtremes(xExt.min, xExt.max);
+                });
+              });
+            }
+          });
+          return scope.$watch('loading', function(newVal, oldVal) {
+            var chart;
+            if (exist(newVal)) {
+              chart = element.highcharts();
+              if (chart) {
+                if (newVal) {
+                  return chart.showLoading(scope.loadingMessage || DEFAULT_LOADING_MESSAGE);
+                } else if (oldVal) {
+                  return chart.hideLoading();
+                }
+              }
+            }
+          });
         }
       };
     }

@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-directives', ['bc.form', 'bc.base-form-field-error', 'bc.form-text-field-error', 'bc.form-chosen-field-error', 'bc.form-date-of-birth-field-error', 'bc.form-hidden-field-error', 'bc.table', 'bc.chosen', 'bc.switch', 'bc.highcharts']);
+  angular.module('bc.angular-directives', ['bc.form', 'bc.base-form-field-error', 'bc.form-text-field-error', 'bc.form-chosen-field-error', 'bc.form-date-of-birth-field-error', 'bc.form-hidden-field-error', 'bc.table', 'bc.chosen', 'bc.switch', 'bc.highcharts', 'ng.restrict']);
 
 }).call(this);
 
@@ -565,6 +565,48 @@
           return scope.getSafeValue = function(value) {
             return $sce.trustAsHtml(value);
           };
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('ng.restrict', []).directive('ngRestrict', [
+    '$parse', function($parse) {
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, iElement, iAttrs, controller) {
+          return scope.$watch(iAttrs.ngModel, function(value) {
+            var regex, regexs, _i, _len, _results;
+            if (value == null) {
+              value = '';
+            }
+            try {
+              regexs = eval(iAttrs.ngRestrict);
+            } catch (_error) {
+              regexs = iAttrs.ngRestrict;
+            }
+            if ((exist(regexs)) && (exist(value))) {
+              if (type(regexs === 'string')) {
+                regexs = [regexs];
+              }
+              if (type(regexs === 'array')) {
+                _results = [];
+                for (_i = 0, _len = regexs.length; _i < _len; _i++) {
+                  regex = regexs[_i];
+                  if (type(regex === 'string')) {
+                    _results.push($parse(iAttrs.ngModel).assign(scope, value.toString().replace(new RegExp(regex, "g"), "").replace(/\s+/g, "-")));
+                  } else {
+                    _results.push(void 0);
+                  }
+                }
+                return _results;
+              }
+            }
+          });
         }
       };
     }

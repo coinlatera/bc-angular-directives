@@ -753,6 +753,8 @@
             return scope.displayError('Enter a valid phone number');
           } else if (scope.modelCtrl.$error['bitcoinAddress']) {
             return scope.displayError('Invalid Bitcoin address');
+          } else if (scope.modelCtrl.$error['SIN']) {
+            return scope.displayError('Invalid Social Insurance Number');
           }
         };
         scope.updateSubmitPassiveErrorState = function() {

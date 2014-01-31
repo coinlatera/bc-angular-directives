@@ -130,6 +130,8 @@ angular.module('bc.base-form-field-error', []).service 'baseBcFormFieldError', -
         scope.displayError 'Enter a valid phone number'
       else if scope.modelCtrl.$error['bitcoinAddress']
         scope.displayError 'Invalid Bitcoin address'
+      else if scope.modelCtrl.$error['SIN']
+        scope.displayError 'Invalid Social Insurance Number'
 
     scope.updateSubmitPassiveErrorState = ->
       if scope.modelCtrl.$error['required']

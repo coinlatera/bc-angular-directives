@@ -1,5 +1,5 @@
 (function() {
-  angular.module('bc.angular-directives', ['bc.form', 'bc.base-form-field-error', 'bc.form-text-field-error', 'bc.form-chosen-field-error', 'bc.form-date-of-birth-field-error', 'bc.form-hidden-field-error', 'bc.table', 'bc.chosen', 'bc.switch']);
+  angular.module('bc.angular-directives', ['bc.form', 'bc.base-form-field-error', 'bc.form-text-field-error', 'bc.form-chosen-field-error', 'bc.form-date-of-birth-field-error', 'bc.form-hidden-field-error', 'bc.table', 'bc.chosen', 'bc.switch', 'bc.highcharts', 'ng.restrict']);
 
 }).call(this);
 
@@ -389,6 +389,64 @@
 }).call(this);
 
 (function() {
+  angular.module('bc.highcharts', []).directive('bcHighcharts', [
+    '$timeout', function($timeout) {
+      return {
+        restrict: 'EAC',
+        replace: true,
+        template: '<div></div>',
+        scope: {
+          config: '=',
+          loading: '=',
+          loadingMessage: '=',
+          afterSetExtremes: '='
+        },
+        link: function(scope, element, attrs) {
+          var DEFAULT_LOADING_MESSAGE, afterSetExtremesHandler;
+          DEFAULT_LOADING_MESSAGE = 'Loading data from server...';
+          afterSetExtremesHandler = function(e) {
+            if (type(scope.afterSetExtremes === 'function')) {
+              return scope.afterSetExtremes(e, element.highcharts());
+            }
+          };
+          scope.$watch('config', function(newVal, oldVal) {
+            if (newVal && newVal !== oldVal) {
+              if (!exist(newVal.xAxis)) {
+                newVal.xAxis = {};
+              }
+              newVal.xAxis.events = {
+                afterSetExtremes: afterSetExtremesHandler
+              };
+              return element.highcharts('StockChart', newVal, function(chart) {
+                return $timeout(function() {
+                  var xExt;
+                  xExt = chart.xAxis[0].getExtremes();
+                  return chart.xAxis[0].setExtremes(xExt.min, xExt.max);
+                });
+              });
+            }
+          });
+          return scope.$watch('loading', function(newVal, oldVal) {
+            var chart;
+            if (exist(newVal)) {
+              chart = element.highcharts();
+              if (chart) {
+                if (newVal) {
+                  return chart.showLoading(scope.loadingMessage || DEFAULT_LOADING_MESSAGE);
+                } else if (oldVal) {
+                  return chart.hideLoading();
+                }
+              }
+            }
+          });
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
   angular.module('bc.switch', []).directive('bcSwitch', [
     '$timeout', function($timeout) {
       return {
@@ -507,6 +565,48 @@
           return scope.getSafeValue = function(value) {
             return $sce.trustAsHtml(value);
           };
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('ng.restrict', []).directive('ngRestrict', [
+    '$parse', function($parse) {
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, iElement, iAttrs, controller) {
+          return scope.$watch(iAttrs.ngModel, function(value) {
+            var regex, regexs, _i, _len, _results;
+            if (value == null) {
+              value = '';
+            }
+            try {
+              regexs = eval(iAttrs.ngRestrict);
+            } catch (_error) {
+              regexs = iAttrs.ngRestrict;
+            }
+            if ((exist(regexs)) && (exist(value))) {
+              if (type(regexs === 'string')) {
+                regexs = [regexs];
+              }
+              if (type(regexs === 'array')) {
+                _results = [];
+                for (_i = 0, _len = regexs.length; _i < _len; _i++) {
+                  regex = regexs[_i];
+                  if (type(regex === 'string')) {
+                    _results.push($parse(iAttrs.ngModel).assign(scope, value.toString().replace(new RegExp(regex, "g"), "").replace(/\s+/g, "-")));
+                  } else {
+                    _results.push(void 0);
+                  }
+                }
+                return _results;
+              }
+            }
+          });
         }
       };
     }
@@ -695,6 +795,8 @@
             return scope.displayError('Enter a valid phone number');
           } else if (scope.modelCtrl.$error['bitcoinAddress']) {
             return scope.displayError('Invalid Bitcoin address');
+          } else if (scope.modelCtrl.$error['SIN']) {
+            return scope.displayError('Invalid Social Insurance Number');
           }
         };
         scope.updateSubmitPassiveErrorState = function() {

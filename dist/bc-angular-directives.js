@@ -797,6 +797,8 @@
             return scope.displayError('Invalid Bitcoin address');
           } else if (scope.modelCtrl.$error['SIN']) {
             return scope.displayError('Invalid Social Insurance Number');
+          } else if (scope.modelCtrl.$error['passwordMatch']) {
+            return scope.displayError('These passwords don\'t match');
           }
         };
         scope.updateSubmitPassiveErrorState = function() {

@@ -132,6 +132,8 @@ angular.module('bc.base-form-field-error', []).service 'baseBcFormFieldError', -
         scope.displayError 'Invalid Bitcoin address'
       else if scope.modelCtrl.$error['SIN']
         scope.displayError 'Invalid Social Insurance Number'
+      else if scope.modelCtrl.$error['passwordMatch']
+        scope.displayError 'These passwords don\'t match'
 
     scope.updateSubmitPassiveErrorState = ->
       if scope.modelCtrl.$error['required']
